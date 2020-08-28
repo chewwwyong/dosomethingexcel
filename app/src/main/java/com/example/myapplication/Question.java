@@ -27,11 +27,7 @@ public class Question extends AppCompatActivity {
     ImageView B1,B2,B3,B4;
 
     int[] imgId={R.drawable.end2,R.drawable.photo1,R.drawable.photo2,R.drawable.review};
-    String[] imgname = {"B1.jpg","B2.jpg","B3.jpg","B4.jpg"};
-
     ArrayList<String> Image = new ArrayList<>();
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,23 +45,18 @@ public class Question extends AppCompatActivity {
         Image.add("B4.jpg");
 
 
-        // 获取excel文件流
+
         is = getResources().openRawResource(R.raw.testing);
-        // 获取workbook对象
         workbook = null;
         try {
             workbook = new XSSFWorkbook(is);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        // 获取sheet对象
         sheet = workbook.getSheetAt(0);
-        // 获取row对象
         row = sheet.getRow(0);
         setTitle(String.valueOf(row.getCell(2)));
-        // 获取sheet对象
         sheet = workbook.getSheet(String.valueOf(row.getCell(2)));
-        // 获取row对象
         row = sheet.getRow(1);
 
         txv.setText(String.valueOf(row.getCell(0)));
@@ -76,7 +67,7 @@ public class Question extends AppCompatActivity {
                 row = sheet.getRow(1);
                 for(int i=0;i<Image.size();i++){
                     if(Image.get(0).equals( row.getCell(8))){
-                        B1.setBackgroundResource(R.drawable.end2);
+                        B1.setBackgroundResource(imgId[0]);
                     }
                 }
 
@@ -89,7 +80,7 @@ public class Question extends AppCompatActivity {
                 row = sheet.getRow(1);
                 for(int i=0;i<Image.size();i++){
                     if(Image.get(1).equals( row.getCell(9))){
-                        B2.setBackgroundResource(R.drawable.photo1);
+                        B2.setBackgroundResource(imgId[1]);
                     }
                 }
                 Toast.makeText(Question.this,"答案不是這個哦",Toast.LENGTH_SHORT).show();
@@ -101,7 +92,7 @@ public class Question extends AppCompatActivity {
                 row = sheet.getRow(1);
                 for(int i=0;i<Image.size();i++){
                     if(Image.get(2).equals( row.getCell(10))){
-                        B3.setBackgroundResource(R.drawable.photo2);
+                        B3.setBackgroundResource(imgId[2]);
                     }
                 }
                 Toast.makeText(Question.this,"答案不是這個哦",Toast.LENGTH_SHORT).show();
@@ -113,7 +104,7 @@ public class Question extends AppCompatActivity {
                 row = sheet.getRow(1);
                 for(int i=0;i<Image.size();i++){
                     if(Image.get(3).equals( row.getCell(11))){
-                        B4.setBackgroundResource(R.drawable.photo3);
+                        B4.setBackgroundResource(imgId[3]);
                     }
                 }
                 Toast.makeText(Question.this,"答對了",Toast.LENGTH_SHORT).show();
