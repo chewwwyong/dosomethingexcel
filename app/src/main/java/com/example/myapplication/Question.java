@@ -59,54 +59,46 @@ public class Question extends AppCompatActivity {
         sheet = workbook.getSheet(String.valueOf(row.getCell(2)));
         row = sheet.getRow(1);
 
+        for(int i=0;i<Image.size();i++){
+            if(Image.get(0).equals(String.valueOf(row.getCell(8)))){
+                B1.setBackgroundResource(imgId[0]);
+            }
+            if(Image.get(1).equals(String.valueOf(row.getCell(9)))){
+                B2.setBackgroundResource(imgId[1]);
+            }
+            if(Image.get(2).equals(String.valueOf(row.getCell(10)))){
+                B3.setBackgroundResource(imgId[2]);
+            }
+            if(Image.get(3).equals(String.valueOf(row.getCell(11)))){
+                B4.setBackgroundResource(imgId[3]);
+            }
+        }
+        //Toast.makeText(this,String.valueOf(row.getCell(8)),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this,Image.get(0),Toast.LENGTH_SHORT).show();
         txv.setText(String.valueOf(row.getCell(0)));
 
         findViewById(R.id.B1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                row = sheet.getRow(1);
-                for(int i=0;i<Image.size();i++){
-                    if(Image.get(0).equals( row.getCell(8))){
-                        B1.setBackgroundResource(imgId[0]);
-                    }
-                }
-
                 Toast.makeText(Question.this,"答案不是這個哦",Toast.LENGTH_SHORT).show();
+
             }
         });
         findViewById(R.id.B2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                row = sheet.getRow(1);
-                for(int i=0;i<Image.size();i++){
-                    if(Image.get(1).equals( row.getCell(9))){
-                        B2.setBackgroundResource(imgId[1]);
-                    }
-                }
                 Toast.makeText(Question.this,"答案不是這個哦",Toast.LENGTH_SHORT).show();
             }
         });
         findViewById(R.id.B3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                row = sheet.getRow(1);
-                for(int i=0;i<Image.size();i++){
-                    if(Image.get(2).equals( row.getCell(10))){
-                        B3.setBackgroundResource(imgId[2]);
-                    }
-                }
                 Toast.makeText(Question.this,"答案不是這個哦",Toast.LENGTH_SHORT).show();
             }
         });
         findViewById(R.id.B4).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                row = sheet.getRow(1);
-                for(int i=0;i<Image.size();i++){
-                    if(Image.get(3).equals( row.getCell(11))){
-                        B4.setBackgroundResource(imgId[3]);
-                    }
-                }
                 Toast.makeText(Question.this,"答對了",Toast.LENGTH_SHORT).show();
             }
         });

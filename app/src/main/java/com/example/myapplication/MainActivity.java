@@ -84,13 +84,14 @@ public class MainActivity extends AppCompatActivity {
         txv2 = findViewById(R.id.txv2);
         iv = (ImageView)this.findViewById(R.id.imageViewObj);
 
-        soundPoolHelper = new SoundPoolHelper(4,SoundPoolHelper.TYPE_MUSIC)
+        soundPoolHelper = new SoundPoolHelper(6,SoundPoolHelper.TYPE_MUSIC)
                 .setRingtoneType(SoundPoolHelper.RING_TYPE_MUSIC)
                 .load(MainActivity.this,"OldMan_v1.mp3",R.raw.into)
                 .load(MainActivity.this,"OldMan_v2.mp3",R.raw.operator)
                 .load(MainActivity.this,"OldMan_v3.mp3",R.raw.demilitarized)
-                .load(MainActivity.this,"Girl_v1.mp3",R.raw.danzon);
-        soundPoolHelper.play("happy2",false);
+                .load(MainActivity.this,"Girl_v1.mp3",R.raw.danzon)
+                .load(MainActivity.this,"audio.mp3",R.raw.audio)
+                .load(MainActivity.this,"audio2.mp3",R.raw.audio2);
 
         timer = new Timer();
         final TimerTask task = new TimerTask() {
@@ -102,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
                         time_Total++;
                         time_now++;
 
-                        if(time_Total<=90){
+                        if(time_Total<=180){
                             txv.setText("Time："+time_Total+"s / 180s");
                             if(once!=0) {
                                 setexcel();
@@ -120,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
                                 once=0;
                             }
                         }
-                        else if(time_Total>90 && time_Total<140){
+                        else if(time_Total>180 && time_Total<360){
                             txv.setText("Time："+time_now+"s / 180s");
                             if(once_1!=0){
                                 setexcel();
@@ -137,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 voiId = new int[]{R.raw.audio,R.raw.audio2};
                                 voiname = new String[]{"audio.mp3","audio2.mp3"};
+
 
                                 deal(sheet);
                                 once_1=0;
@@ -161,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
                                         for (String s : voiname) {
                                             if (s.equals(Voice.get(0))) {
                                                 soundPoolHelper.play(voiname[0],false);
+                                                Toast.makeText(MainActivity.this,voiname[0],Toast.LENGTH_SHORT).show();
                                                 filename+=Voice.get(0)+"  --> ";
                                                 txv2.setText(filename);
                                             }
@@ -261,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         //幾秒做一次(單位：毫秒)
-        timer.schedule(task,100,100);
+        timer.schedule(task,500,500);
     }
 
     @Override
@@ -292,6 +295,7 @@ public class MainActivity extends AppCompatActivity {
             }
             num_cell++;
         }
+
 
         //處理Voice_clock
         row = sheet.getRow(1);

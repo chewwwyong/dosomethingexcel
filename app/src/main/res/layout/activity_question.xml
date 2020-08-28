@@ -24,7 +24,6 @@
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:layout_marginBottom="60dp"
-        android:background="@drawable/end2"
         app:layout_constraintBottom_toTopOf="@+id/B3"
         app:layout_constraintEnd_toStartOf="@+id/B2" />
 
@@ -47,7 +46,6 @@
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:layout_marginBottom="104dp"
-        android:background="@drawable/photo2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/B4" />
 
@@ -58,7 +56,6 @@
         android:layout_marginEnd="28dp"
         android:layout_marginRight="28dp"
         android:layout_marginBottom="104dp"
-        android:background="@drawable/review"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -105,7 +102,6 @@
         android:layout_marginEnd="28dp"
         android:layout_marginRight="28dp"
         android:layout_marginBottom="60dp"
-        android:background="@drawable/photo1"
         app:layout_constraintBottom_toTopOf="@+id/B4"
         app:layout_constraintEnd_toEndOf="parent" />
 
