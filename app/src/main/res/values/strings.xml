@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">test</string>
+
+    <!-- MotionSDKExampleActivity -->
+    <string name="motion_sdk_example_title">Motion SDK Example</string>
+    <string name="lbl_example_1">Query All Motions</string>
+    <string name="lbl_example_2">Play Motion Sample</string>
+    <string name="lbl_example_3">Play/Resume/Pause Motion</string>
+    <string name="lbl_example_4">Show/Hide Window when Playing Motion</string>
+    <string name="txt_start_demo">Start Demo</string>
+    <string name="btn_querymotions">Query All Motions and Show them</string>
+    <string name="txt_btn_playmotion">Play Sample</string>
+    <string name="txt_btn_play">Select motion to Play</string>
+    <string name="txt_btn_pause">Pause</string>
+    <string name="txt_btn_resume">Resume</string>
+    <string name="txt_btn_stop">Stop</string>
+    <string name="txt_btn_control_window">Play Sample and show/hide window</string>
 </resources>
