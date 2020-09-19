@@ -122,9 +122,8 @@
         android:id="@+id/play_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginTop="108dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginTop="8dp"
         android:text="TextView"
         app:layout_constraintStart_toEndOf="@+id/btn_playmotion"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
