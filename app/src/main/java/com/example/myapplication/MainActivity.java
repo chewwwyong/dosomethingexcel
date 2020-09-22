@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         setContentView(R.layout.activity_main);
 
         initView();
-
+      //  setexcel();
         //Step 1 : Initial Nuwa API Object
         mClientId = new IClientId(this.getPackageName());
         mRobotAPI = new NuwaRobotAPI(this, mClientId);
@@ -145,18 +145,20 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                     time_Total++;
                     time_now++;
 
-                    if((time_now <=279) && (current_sheet <= all_sheet) && !stop){
+                    if((time_now <= 279) && (current_sheet <= all_sheet) && !stop){
 
                         txv.setText("Time：" + time_Total);
                         if (once != 0) {
                             setexcel();
                             initValue();
                             sheet = workbook.getSheet(String.valueOf(row.getCell(current_sheet)));
+
                             setTitle(String.valueOf(row.getCell(current_sheet)));
                             String is_Section = String.valueOf(row.getCell(current_sheet)).substring(0,7);
                             String is_Review = String.valueOf(row.getCell(current_sheet)).substring(0,6);
 
                             if(is_Section.equals("Section")){
+                                //Toast.makeText(MainActivity.this,"123",Toast.LENGTH_SHORT).show();
                                 deal_Section(sheet);
                                 loadSoundFile();
                                 once = 0;
@@ -164,6 +166,8 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                             }
                             else if(is_Review.equals("Review")){
                                 stop = true;
+                                once = 0;
+
                                 Intent it = new Intent(MainActivity.this,Review.class);
                                 it.putExtra("current_sheet",current_sheet);
                                 it.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -271,7 +275,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
     public void deal_Section(Sheet sheet) {
 
-     /*   //處理Face
+        //處理Face
         row = sheet.getRow(0);
         row_cell = row.getPhysicalNumberOfCells();
         num_cell = 1;
@@ -301,7 +305,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                 row_cell--;
             }
             num_cell++;
-        }*/
+        }
 
         //處理Voice
         row = sheet.getRow(2);
@@ -318,7 +322,6 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
             }
             num_cell++;
         }
-
 
         //處理Voice_clock
         row = sheet.getRow(3);
@@ -630,12 +633,10 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
             int Id = getResources().getIdentifier(str,  "raw", getPackageName());
             soundPoolHelper.load(MainActivity.this, str,  Id);
             try {
-                Thread.sleep(100);// 給予初始化音樂文件足夠時間
+                Thread.sleep(50);// 給予初始化音樂文件足夠時間
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-
-
     }
 }

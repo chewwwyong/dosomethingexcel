@@ -3,6 +3,8 @@ package com.example.myapplication;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,6 +13,7 @@ import android.widget.Toast;
 
 import com.nuwarobotics.lib.voice.ifly.model.answer.Answer;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -63,14 +66,12 @@ public class Review extends AppCompatActivity {
         p3 = findViewById(R.id.p3);
         p4 = findViewById(R.id.p4);
 
-        qA.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                nowchoose = "A";
-                if(ans.equals(nowchoose)){
-                    Toast.makeText(Review.this,"答對了",Toast.LENGTH_SHORT).show();
-                    exe();
-                }
+        qA.setOnClickListener(v -> {
+            nowchoose = "A";
+            if(ans.equals(nowchoose)){
+                Toast.makeText(Review.this,"答對了",Toast.LENGTH_SHORT).show();
+                times--;
+                exe();
             }
         });
 
@@ -80,6 +81,7 @@ public class Review extends AppCompatActivity {
 
                 nowchoose = "B";
                 if(ans.equals(nowchoose)){
+                    times--;
                     exe();
                     Toast.makeText(Review.this,"答對了",Toast.LENGTH_SHORT).show();
 
@@ -95,6 +97,7 @@ public class Review extends AppCompatActivity {
                 nowchoose = "C";
                 if(ans.equals(nowchoose)){
                     Toast.makeText(Review.this,"答對了",Toast.LENGTH_SHORT).show();
+                    times--;
                     exe();
                 }
             }
@@ -106,6 +109,7 @@ public class Review extends AppCompatActivity {
                 nowchoose = "D";
                 if(ans.equals(nowchoose)){
                     Toast.makeText(Review.this,"答對了",Toast.LENGTH_SHORT).show();
+                    times--;
                     exe();
                 }
             }
@@ -117,6 +121,7 @@ public class Review extends AppCompatActivity {
                 nowchoose = "A";
                 if(ans.equals(nowchoose)){
                     Toast.makeText(Review.this,"答對了",Toast.LENGTH_SHORT).show();
+                    times--;
                     exe();
                 }
             }
@@ -128,6 +133,7 @@ public class Review extends AppCompatActivity {
                 nowchoose = "B";
                 if(ans.equals(nowchoose)){
                     Toast.makeText(Review.this,"答對了",Toast.LENGTH_SHORT).show();
+                    times--;
                     exe();
                 }
             }
@@ -139,6 +145,7 @@ public class Review extends AppCompatActivity {
                 nowchoose = "C";
                 if(ans.equals(nowchoose)){
                     Toast.makeText(Review.this,"答對了",Toast.LENGTH_SHORT).show();
+                    times--;
                     exe();
                 }
             }
@@ -154,12 +161,13 @@ public class Review extends AppCompatActivity {
                 }
             }
         });
+        Toast.makeText(Review.this,String.valueOf(current_sheet),Toast.LENGTH_SHORT).show();
 
-        Intent it = this.getIntent();
-        int current_sheet = it.getIntExtra("current_sheet",0);
+        Intent it = Review.this.getIntent();
+        current_sheet = it.getIntExtra("current_sheet",2);
         setexcel();
         sheet = workbook.getSheet(String.valueOf(row.getCell(current_sheet)));
-        String is_Review = String.valueOf(row.getCell(current_sheet)).substring(0,6);
+        times = sheet.getPhysicalNumberOfRows();
         deal_Review(sheet);
         exe();
 
@@ -183,14 +191,14 @@ public class Review extends AppCompatActivity {
         // 取得row對象
         row = sheet.getRow(0);
         fmt = new DataFormatter();
-        times = sheet.getPhysicalNumberOfRows();
+
     }
 
     public void deal_Review(Sheet sheet){
 
         //處理Question
         int numrow = 1;
-        while(numrow <= sheet.getPhysicalNumberOfRows()-1){
+        while(numrow < (sheet.getPhysicalNumberOfRows())){
             row = sheet.getRow(numrow);
             //Toast.makeText(MainActivity.this,String.valueOf(row.getCell(0)),Toast.LENGTH_SHORT).show();
             String ssss = fmt.formatCellValue(row.getCell(0, Row.RETURN_BLANK_AS_NULL));
@@ -203,10 +211,10 @@ public class Review extends AppCompatActivity {
 
         //處理Type
         numrow = 1;
-        while(numrow <= sheet.getPhysicalNumberOfRows()-1){
+        while(numrow < sheet.getPhysicalNumberOfRows()){
             row = sheet.getRow(numrow);
             //Toast.makeText(MainActivity.this,String.valueOf(row.getCell(0)),Toast.LENGTH_SHORT).show();
-            String ssss = fmt.formatCellValue(row.getCell(5, Row.RETURN_BLANK_AS_NULL));
+            String ssss = fmt.formatCellValue(row.getCell(3, Row.RETURN_BLANK_AS_NULL));
             if (!ssss.trim().isEmpty()) {
                 Type.add(ssss);
                 //   Toast.makeText(MainActivity.this,Question.get(numrow-1),Toast.LENGTH_SHORT).show();
@@ -216,27 +224,69 @@ public class Review extends AppCompatActivity {
 
         //處理Text
         numrow = 1;
-        while(numrow <= sheet.getPhysicalNumberOfRows()-1) {
+        while(numrow < sheet.getPhysicalNumberOfRows()  ) {
             row = sheet.getRow(numrow);
             //Toast.makeText(MainActivity.this,String.valueOf(row.getCell(0)),Toast.LENGTH_SHORT).show();
-            String s1 = fmt.formatCellValue(row.getCell(6, Row.RETURN_BLANK_AS_NULL));
-            String s2 = fmt.formatCellValue(row.getCell(7, Row.RETURN_BLANK_AS_NULL));
-            String s3 = fmt.formatCellValue(row.getCell(8, Row.RETURN_BLANK_AS_NULL));
-            String s4 = fmt.formatCellValue(row.getCell(9, Row.RETURN_BLANK_AS_NULL));
-            Text.add(s1);
-            Text.add(s2);
-            Text.add(s3);
-            Text.add(s4);
+            String s1 = fmt.formatCellValue(row.getCell(4, Row.RETURN_BLANK_AS_NULL));
+            String s2 = fmt.formatCellValue(row.getCell(5, Row.RETURN_BLANK_AS_NULL));
+            String s3 = fmt.formatCellValue(row.getCell(6, Row.RETURN_BLANK_AS_NULL));
+            String s4 = fmt.formatCellValue(row.getCell(7, Row.RETURN_BLANK_AS_NULL));
+
+            if(!s1.isEmpty()){
+                Text.add(s1);
+                Text.add(s2);
+                Text.add(s3);
+                Text.add(s4);
+            }
+
+
             // Toast.makeText(MainActivity.this,Question.get(numrow-1),Toast.LENGTH_SHORT).show();
+            numrow++;
+        }
+
+        //處理Picture
+        numrow = 1;
+        while(numrow < sheet.getPhysicalNumberOfRows() ) {
+            row = sheet.getRow(numrow);
+            //Toast.makeText(MainActivity.this,String.valueOf(row.getCell(0)),Toast.LENGTH_SHORT).show();
+            String s1 = fmt.formatCellValue(row.getCell(8, Row.RETURN_BLANK_AS_NULL));
+            String s2 = fmt.formatCellValue(row.getCell(9, Row.RETURN_BLANK_AS_NULL));
+            String s3 = fmt.formatCellValue(row.getCell(10, Row.RETURN_BLANK_AS_NULL));
+            String s4 = fmt.formatCellValue(row.getCell(11, Row.RETURN_BLANK_AS_NULL));
+
+            if(!s1.isEmpty()){
+                String str1 = s1.substring(0, s1.indexOf("."));
+                String str2 = s2.substring(0, s2.indexOf("."));
+                String str3 = s3.substring(0, s3.indexOf("."));
+                String str4 = s4.substring(0, s4.indexOf("."));
+                int Id1 = getResources().getIdentifier(str1,  "drawable", getPackageName());
+                String uri1 = "android.resource://" + getPackageName() + "/" + Id1;
+
+                int Id2 = getResources().getIdentifier(str2,  "drawable", getPackageName());
+                String uri2 = "android.resource://" + getPackageName() + "/" + Id2;
+
+                int Id3 = getResources().getIdentifier(str3,  "drawable", getPackageName());
+                String uri3 = "android.resource://" + getPackageName() + "/" + Id3;
+
+                int Id4 = getResources().getIdentifier(str4,  "drawable", getPackageName());
+                String uri4 = "android.resource://" + getPackageName() + "/" + Id4;
+
+                Picture.add(uri1);
+                Picture.add(uri2);
+                Picture.add(uri3);
+                Picture.add(uri4);
+            }
+
+
             numrow++;
         }
 
         //處理Answer
         numrow = 1;
-        while(numrow <= sheet.getPhysicalNumberOfRows()-1){
+        while(numrow <= sheet.getPhysicalNumberOfRows() -1 ){
             row = sheet.getRow(numrow);
             //Toast.makeText(MainActivity.this,String.valueOf(row.getCell(0)),Toast.LENGTH_SHORT).show();
-            String ssss = fmt.formatCellValue(row.getCell(14, Row.RETURN_BLANK_AS_NULL));
+            String ssss = fmt.formatCellValue(row.getCell(12, Row.RETURN_BLANK_AS_NULL));
             if (!ssss.trim().isEmpty()) {
                 Answer.add(ssss);
                 //   Toast.makeText(MainActivity.this,Question.get(numrow-1),Toast.LENGTH_SHORT).show();
@@ -257,7 +307,7 @@ public class Review extends AppCompatActivity {
                 qC.setText(Text.get(num+2));
                 qD.setText(Text.get(num+3));
                 num++;
-                times--;
+
             }
 
             else if (Type.get(num).equals("Picture")){
@@ -267,13 +317,18 @@ public class Review extends AppCompatActivity {
 
                 initview();
 
-                p1.setBackgroundResource(R.drawable.photo1);;
-                p2.setBackgroundResource(R.drawable.photo2);
-                p3.setBackgroundResource(R.drawable.photo3);
-                p4.setBackgroundResource(R.drawable.review);
+                p1.setVisibility(View.VISIBLE);
+                p2.setVisibility(View.VISIBLE);
+                p3.setVisibility(View.VISIBLE);
+                p4.setVisibility(View.VISIBLE);
+
+                p1.setImageURI(Uri.parse(Picture.get(num)));
+                p2.setImageURI(Uri.parse(Picture.get(num+1)));
+                p3.setImageURI(Uri.parse(Picture.get(num+2)));
+                p4.setImageURI(Uri.parse(Picture.get(num+3)));
 
                 num++;
-                times--;
+
             }
         }
         else{
@@ -292,10 +347,10 @@ public class Review extends AppCompatActivity {
         qC.setText("");
         qD.setText("");
 
-        p1.setBackgroundColor(000000);
-        p2.setBackgroundColor(000000);
-        p3.setBackgroundColor(000000);
-        p4.setBackgroundColor(000000);
+        p1.setVisibility(View.INVISIBLE);
+        p2.setVisibility(View.INVISIBLE);
+        p3.setVisibility(View.INVISIBLE);
+        p4.setVisibility(View.INVISIBLE);
 
     }
 }
