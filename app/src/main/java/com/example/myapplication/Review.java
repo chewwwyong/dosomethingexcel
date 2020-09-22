@@ -12,6 +12,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nuwarobotics.lib.voice.ifly.model.answer.Answer;
+import com.nuwarobotics.service.IClientId;
+import com.nuwarobotics.service.agent.NuwaRobotAPI;
+import com.nuwarobotics.service.agent.RobotEventCallback;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.poi.ss.usermodel.DataFormatter;
@@ -25,6 +28,9 @@ import java.util.ArrayList;
 
 public class Review extends AppCompatActivity {
 
+    private NuwaRobotAPI mRobotAPI;
+    private IClientId mClientId;
+
     TextView qA,qB,qC,qD,title;
     ImageView p1,p2,p3,p4;
 
@@ -37,11 +43,12 @@ public class Review extends AppCompatActivity {
     int all_sheet = 0;
     int num= 0 ;
     int times=0;
+    int score = 0;
 
     DataFormatter fmt;
 
     ArrayList<String> Question = new ArrayList<>();
-    ArrayList<String> Motion_R = new ArrayList<>();
+    ArrayList<String> Motion = new ArrayList<>();
 
     ArrayList<String> Type = new ArrayList<>();
     ArrayList<String> Text = new ArrayList<>();
@@ -54,6 +61,11 @@ public class Review extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
+
+        //Step 1 : Initial Nuwa API Object
+        mClientId = new IClientId(this.getPackageName());
+        mRobotAPI = new NuwaRobotAPI(this, mClientId);
+        mRobotAPI.registerRobotEventListener(robotEventCallback); //listen callback of robot service event
 
         qA = findViewById(R.id.qA);
         qB = findViewById(R.id.qB);
@@ -71,6 +83,12 @@ public class Review extends AppCompatActivity {
             if(ans.equals(nowchoose)){
                 Toast.makeText(Review.this,"答對了",Toast.LENGTH_SHORT).show();
                 times--;
+                score++;
+                exe();
+            }
+            else{
+                Toast.makeText(Review.this,"答錯了",Toast.LENGTH_SHORT).show();
+                times--;
                 exe();
             }
         });
@@ -82,12 +100,16 @@ public class Review extends AppCompatActivity {
                 nowchoose = "B";
                 if(ans.equals(nowchoose)){
                     times--;
+                    score++;
                     exe();
                     Toast.makeText(Review.this,"答對了",Toast.LENGTH_SHORT).show();
 
                 }
-                //Toast.makeText(Review.this,ans,Toast.LENGTH_SHORT).show();
-                //Toast.makeText(Review.this,nowchoose,Toast.LENGTH_SHORT).show();
+                else{
+                    Toast.makeText(Review.this,"答錯了",Toast.LENGTH_SHORT).show();
+                    times--;
+                    exe();
+                }
             }
         });
 
@@ -97,6 +119,12 @@ public class Review extends AppCompatActivity {
                 nowchoose = "C";
                 if(ans.equals(nowchoose)){
                     Toast.makeText(Review.this,"答對了",Toast.LENGTH_SHORT).show();
+                    score++;
+                    times--;
+                    exe();
+                }
+                else{
+                    Toast.makeText(Review.this,"答錯了",Toast.LENGTH_SHORT).show();
                     times--;
                     exe();
                 }
@@ -109,6 +137,12 @@ public class Review extends AppCompatActivity {
                 nowchoose = "D";
                 if(ans.equals(nowchoose)){
                     Toast.makeText(Review.this,"答對了",Toast.LENGTH_SHORT).show();
+                    score++;
+                    times--;
+                    exe();
+                }
+                else{
+                    Toast.makeText(Review.this,"答錯了",Toast.LENGTH_SHORT).show();
                     times--;
                     exe();
                 }
@@ -121,6 +155,12 @@ public class Review extends AppCompatActivity {
                 nowchoose = "A";
                 if(ans.equals(nowchoose)){
                     Toast.makeText(Review.this,"答對了",Toast.LENGTH_SHORT).show();
+                    score++;
+                    times--;
+                    exe();
+                }
+                else{
+                    Toast.makeText(Review.this,"答錯了",Toast.LENGTH_SHORT).show();
                     times--;
                     exe();
                 }
@@ -133,6 +173,12 @@ public class Review extends AppCompatActivity {
                 nowchoose = "B";
                 if(ans.equals(nowchoose)){
                     Toast.makeText(Review.this,"答對了",Toast.LENGTH_SHORT).show();
+                    score++;
+                    times--;
+                    exe();
+                }
+                else{
+                    Toast.makeText(Review.this,"答錯了",Toast.LENGTH_SHORT).show();
                     times--;
                     exe();
                 }
@@ -145,6 +191,12 @@ public class Review extends AppCompatActivity {
                 nowchoose = "C";
                 if(ans.equals(nowchoose)){
                     Toast.makeText(Review.this,"答對了",Toast.LENGTH_SHORT).show();
+                    score++;
+                    times--;
+                    exe();
+                }
+                else{
+                    Toast.makeText(Review.this,"答錯了",Toast.LENGTH_SHORT).show();
                     times--;
                     exe();
                 }
@@ -157,11 +209,16 @@ public class Review extends AppCompatActivity {
                 nowchoose = "D";
                 if(ans.equals(nowchoose)){
                     Toast.makeText(Review.this,"答對了",Toast.LENGTH_SHORT).show();
+                    score++;
+                    exe();
+                }
+                else{
+                    Toast.makeText(Review.this,"答錯了",Toast.LENGTH_SHORT).show();
+                    times--;
                     exe();
                 }
             }
         });
-        Toast.makeText(Review.this,String.valueOf(current_sheet),Toast.LENGTH_SHORT).show();
 
         Intent it = Review.this.getIntent();
         current_sheet = it.getIntExtra("current_sheet",2);
@@ -198,7 +255,7 @@ public class Review extends AppCompatActivity {
 
         //處理Question
         int numrow = 1;
-        while(numrow < (sheet.getPhysicalNumberOfRows())){
+        while(numrow <= (sheet.getPhysicalNumberOfRows()- 1) ){
             row = sheet.getRow(numrow);
             //Toast.makeText(MainActivity.this,String.valueOf(row.getCell(0)),Toast.LENGTH_SHORT).show();
             String ssss = fmt.formatCellValue(row.getCell(0, Row.RETURN_BLANK_AS_NULL));
@@ -209,9 +266,22 @@ public class Review extends AppCompatActivity {
             }
         }
 
+        //處理Motion
+        numrow = 1;
+        while(numrow <= sheet.getPhysicalNumberOfRows() -1 ){
+            row = sheet.getRow(numrow);
+            //Toast.makeText(MainActivity.this,String.valueOf(row.getCell(0)),Toast.LENGTH_SHORT).show();
+            String ssss = fmt.formatCellValue(row.getCell(1, Row.RETURN_BLANK_AS_NULL));
+            if (!ssss.trim().isEmpty()) {
+                Motion.add(ssss);
+                //   Toast.makeText(MainActivity.this,Question.get(numrow-1),Toast.LENGTH_SHORT).show();
+                numrow++;
+            }
+        }
+
         //處理Type
         numrow = 1;
-        while(numrow < sheet.getPhysicalNumberOfRows()){
+        while(numrow <= sheet.getPhysicalNumberOfRows() -1 ){
             row = sheet.getRow(numrow);
             //Toast.makeText(MainActivity.this,String.valueOf(row.getCell(0)),Toast.LENGTH_SHORT).show();
             String ssss = fmt.formatCellValue(row.getCell(3, Row.RETURN_BLANK_AS_NULL));
@@ -224,7 +294,7 @@ public class Review extends AppCompatActivity {
 
         //處理Text
         numrow = 1;
-        while(numrow < sheet.getPhysicalNumberOfRows()  ) {
+        while(numrow <= sheet.getPhysicalNumberOfRows() -1  ) {
             row = sheet.getRow(numrow);
             //Toast.makeText(MainActivity.this,String.valueOf(row.getCell(0)),Toast.LENGTH_SHORT).show();
             String s1 = fmt.formatCellValue(row.getCell(4, Row.RETURN_BLANK_AS_NULL));
@@ -246,7 +316,7 @@ public class Review extends AppCompatActivity {
 
         //處理Picture
         numrow = 1;
-        while(numrow < sheet.getPhysicalNumberOfRows() ) {
+        while(numrow <= sheet.getPhysicalNumberOfRows() -1 ) {
             row = sheet.getRow(numrow);
             //Toast.makeText(MainActivity.this,String.valueOf(row.getCell(0)),Toast.LENGTH_SHORT).show();
             String s1 = fmt.formatCellValue(row.getCell(8, Row.RETURN_BLANK_AS_NULL));
@@ -297,8 +367,9 @@ public class Review extends AppCompatActivity {
 
     public void exe(){
         //num = 0;
-        if(times>=0){
+        if(times>1){
             if(Type.get(num).equals("Text")){
+                mRobotAPI.motionPlay(Motion.get(num), true);
                 ans = Answer.get(num);
                 initview();
                 title.setText(Question.get(num));
@@ -311,6 +382,7 @@ public class Review extends AppCompatActivity {
             }
 
             else if (Type.get(num).equals("Picture")){
+                mRobotAPI.motionPlay(Motion.get(num), true);
                 ans = Answer.get(num);
                 //Toast.makeText(Review.this,"123",Toast.LENGTH_SHORT).show();
                 title.setText(Question.get(num));
@@ -332,7 +404,9 @@ public class Review extends AppCompatActivity {
             }
         }
         else{
+            Toast.makeText(Review.this,String.valueOf(score),Toast.LENGTH_SHORT).show();
             Intent it = new Intent(Review.this,Ending.class);
+            it.putExtra("score",score);
             it.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(it);
         }
@@ -351,6 +425,51 @@ public class Review extends AppCompatActivity {
         p2.setVisibility(View.INVISIBLE);
         p3.setVisibility(View.INVISIBLE);
         p4.setVisibility(View.INVISIBLE);
+
+    }
+
+    private RobotEventCallback robotEventCallback = new RobotEventCallback() {
+        @Override
+        public void onStartOfMotionPlay(String s) {
+            showEventMsg("Start Playing Motion...");
+        }
+
+        @Override
+        public void onStopOfMotionPlay(String s) {
+            showEventMsg("Stop Playing Motion...");
+        }
+
+        @Override
+        public void onCompleteOfMotionPlay(String s) {
+            showEventMsg("Play Motion Complete!!!");
+
+            //Step 3 : If (the parameter of motionPlay)auto_fadein is ture,
+            // the transparent view must be closed after motion is complete, error or other case.
+            if(mRobotAPI != null){
+                mRobotAPI.hideWindow(true);
+            }
+        }
+
+        @Override
+        public void onPlayBackOfMotionPlay(String s) {
+            showEventMsg("Playing Motion...");
+        }
+
+        @Override
+        public void onErrorOfMotionPlay(int i) {
+            showEventMsg("When playing Motion, error happen!!! error code: " + i);
+
+            if(mRobotAPI != null){
+                mRobotAPI.hideWindow(true);
+            }
+        }
+    };
+    private void showEventMsg(String status){
+        runOnUiThread(()->{
+            //mTexPlayStatus.append(status);
+           // mTexPlayStatus.append("\n");
+            // Log.d(TAG, status);
+        });
 
     }
 }

@@ -58,6 +58,8 @@ public class Ending extends AppCompatActivity {
     InputStream is;
     XSSFWorkbook workbook;
 
+    int score = 0 ;
+
     private TextToSpeech textToSpeech; // TTS对象
 
     private SoundPoolHelper soundPoolHelper;
@@ -117,23 +119,14 @@ public class Ending extends AppCompatActivity {
         setContentView(R.layout.activity_ending);
 
         initView();
+        Intent it = Ending.this.getIntent();
+        score = it.getIntExtra("score",2);
 
 
         //Step 1 : Initial Nuwa API Object
         mClientId = new IClientId(this.getPackageName());
         mRobotAPI = new NuwaRobotAPI(this, mClientId);
         mRobotAPI.registerRobotEventListener(robotEventCallback); //listen callback of robot service event
-
-        Button btn = findViewById(R.id.btn_playmotion);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mTexPlayStatus.setText("");
-
-                //Step 2 : Execute "Play motion"
-                mRobotAPI.motionPlay(MOTION_SAMPLE, true);
-            }
-        });
 
         timer = new Timer();
         final TimerTask task = new TimerTask() {
@@ -186,52 +179,38 @@ public class Ending extends AppCompatActivity {
                     for (int i = 0; i < Voice_clock.size(); i++) {
                         if (time_now == Integer.parseInt(Voice_clock.get(i))) {
                            // soundPoolHelper.play(voiname[i], false);
-                            filename += Voice.get(i) + "  --> ";
-                            txv2.setText(filename);
                         }
                     }
 
                     for (int i = 0; i < Face_clock.size(); i++) {
                         if (time_now == Integer.parseInt(Face_clock.get(i))) {
                             face.setText(Face.get(i));
-                            filename += Face.get(i) + "  --> ";
-                            txv2.setText(filename);
                         }
                     }
 
                     for (int i = 0; i < Video_clock.size(); i++) {
                         if (time_now == Integer.parseInt(Video_clock.get(i))) {
                             play_video(Video.get(i));
-                            filename += Video.get(i) + "  --> ";
-                            txv2.setText(filename);
                         }
                     }
 
                     for (int i = 0; i < Image_clock.size(); i++) {
                         if (time_now == Integer.parseInt(Image_clock.get(i))) {
-                           // iv.setImageResource(imgId[i]);
-                            filename += Image.get(i) + "  --> ";
-                            txv2.setText(filename);
+
                         }
                     }
                     for (int i = 0; i < Subtitle_clock.size(); i++) {
                         if (time_now == Integer.parseInt(Subtitle_clock.get(i))) {
-                            subtitle.setText(Subtitle.get(i));
-                            //mRobotAPI.startTTS(Subtitle.get(i));
+
                             mRobotAPI.startTTS(Subtitle.get(i));
                             //showface(Subtitle.get(i));
                         }
                     }
                     for (int i = 0; i < Motion_clock.size(); i++) {
-                        if (time_now == Integer.parseInt(Motion_clock.get(i))) {
-                            motion.setText(Motion.get(i));
-                            filename += Motion.get(i) + "  --> ";
-                            txv2.setText(filename);
-                            mTexPlayStatus.setText("");
 
                             //Step 2 : Execute "Play motion"
                             //mRobotAPI.motionPlay(Motion.get(i), true);
-                        }
+
                     }
                 });
             }
@@ -516,15 +495,9 @@ public class Ending extends AppCompatActivity {
 
         mTexPlayStatus = findViewById(R.id.play_status);
 
-        txv = findViewById(R.id.time);
-        txv2 = findViewById(R.id.fileflow);
-        subtitle = findViewById(R.id.subtitle);
-        motion = findViewById(R.id.motion);
-        face = findViewById(R.id.face);
-
         videoView = findViewById(R.id.videoView);
 
-        textToSpeech = new TextToSpeech(Ending.this, (TextToSpeech.OnInitListener) Ending.this); // 参数Context,TextToSpeech.OnInitListener
+      //  textToSpeech = new TextToSpeech(Ending.this, Ending.this); // 参数Context,TextToSpeech.OnInitListener
 
 
 

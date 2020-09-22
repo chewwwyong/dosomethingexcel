@@ -231,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                             mTexPlayStatus.setText("");
 
                             //Step 2 : Execute "Play motion"
-                            //mRobotAPI.motionPlay(Motion.get(i), true);
+                            mRobotAPI.motionPlay(Motion.get(i), true);
                         }
                     }
                 });

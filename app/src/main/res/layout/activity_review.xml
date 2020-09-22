@@ -80,8 +80,8 @@
         android:id="@+id/p1"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="156dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="244dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
@@ -90,8 +90,8 @@
         android:id="@+id/p2"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginStart="264dp"
-        android:layout_marginTop="172dp"
+        android:layout_marginStart="256dp"
+        android:layout_marginTop="244dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
