@@ -47,11 +47,6 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     int current_sheet = 0;
     int all_sheet = 0;
 
-    TextView txv;
-    TextView txv2;
-    TextView subtitle;
-    TextView motion;
-    TextView face;
 
     Row row;
     Sheet sheet;
@@ -126,17 +121,6 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         mRobotAPI = new NuwaRobotAPI(this, mClientId);
         mRobotAPI.registerRobotEventListener(robotEventCallback); //listen callback of robot service event
 
-        Button btn = findViewById(R.id.btn_playmotion);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mTexPlayStatus.setText("");
-
-                //Step 2 : Execute "Play motion"
-                mRobotAPI.motionPlay(MOTION_SAMPLE, true);
-            }
-        });
-
         timer = new Timer();
         final TimerTask task = new TimerTask() {
             @Override
@@ -147,7 +131,6 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
                     if((time_now <= 279) && (current_sheet <= all_sheet) && !stop){
 
-                        txv.setText("Time：" + time_Total);
                         if (once != 0) {
                             setexcel();
                             initValue();
@@ -190,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                             }*/
 
                     for (int i = 0; i < Voice_clock.size(); i++) {
-                        if (time_now == Integer.parseInt(Voice_clock.get(i)) && !Voice.isEmpty()) {
+                        if (!Voice_clock.isEmpty() && time_now == Integer.parseInt(Voice_clock.get(i)) && !Voice.isEmpty()) {
                             String str = Voice.get(i).substring(0, Voice.get(i).indexOf("."));
                             soundPoolHelper.play(str, false);
                         }
@@ -202,13 +185,13 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                     }*/
 
                     for (int i = 0; i < Video_clock.size(); i++) {
-                        if (time_now == Integer.parseInt(Video_clock.get(i))) {
+                        if (!Video_clock.isEmpty() && time_now == Integer.parseInt(Video_clock.get(i))) {
                             play_video(Video.get(i));
                         }
                     }
 
                     for (int i = 0; i < Image_clock.size(); i++) {
-                        if (time_now == Integer.parseInt(Image_clock.get(i))) {
+                        if (!Image_clock.isEmpty() && time_now == Integer.parseInt(Image_clock.get(i))) {
                             String str = Image.get(i).substring(0, Image.get(i).indexOf("."));
                             int Id = getResources().getIdentifier(str,  "drawable", getPackageName());
                             String uri = "android.resource://" + getPackageName() + "/" + Id;
@@ -217,18 +200,13 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                     }
 
                     for (int i = 0; i < Subtitle_clock.size(); i++) {
-                        if (time_now == Integer.parseInt(Subtitle_clock.get(i))) {
-                            subtitle.setText(Subtitle.get(i));
+                        if ( !Subtitle_clock.isEmpty() && time_now == Integer.parseInt(Subtitle_clock.get(i))) {
                             mRobotAPI.startTTS(Subtitle.get(i));
                             //showface(Subtitle.get(i));
                         }
                     }
-                    for (int i = 0; i < Motion_clock.size(); i++) {
-                        if (time_now == Integer.parseInt(Motion_clock.get(i)) && !Motion.isEmpty()) {
-                            motion.setText(Motion.get(i));
-                            filename += Motion.get(i) + "  --> ";
-                            txv2.setText(filename);
-                            mTexPlayStatus.setText("");
+                    for ( int i = 0; i < Motion_clock.size(); i++) {
+                        if (!Motion_clock.isEmpty() && time_now == Integer.parseInt(Motion_clock.get(i)) && !Motion.isEmpty()) {
 
                             //Step 2 : Execute "Play motion"
                             mRobotAPI.motionPlay(Motion.get(i), true);
@@ -514,12 +492,6 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     private void initView() {
 
         mTexPlayStatus = findViewById(R.id.play_status);
-
-        txv = findViewById(R.id.time);
-        txv2 = findViewById(R.id.fileflow);
-        subtitle = findViewById(R.id.subtitle);
-        motion = findViewById(R.id.motion);
-        face = findViewById(R.id.face);
 
         iv = findViewById(R.id.imageViewObj);
 

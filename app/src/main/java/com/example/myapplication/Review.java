@@ -404,9 +404,11 @@ public class Review extends AppCompatActivity {
             }
         }
         else{
+            current_sheet++;
             Toast.makeText(Review.this,String.valueOf(score),Toast.LENGTH_SHORT).show();
             Intent it = new Intent(Review.this,Ending.class);
             it.putExtra("score",score);
+            it.putExtra("current_sheet",current_sheet);
             it.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(it);
         }

@@ -12,7 +12,9 @@ import android.speech.tts.Voice;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.MediaController;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -46,19 +48,16 @@ public class Ending extends AppCompatActivity {
     int current_sheet = 0;
     int all_sheet = 0;
 
-    TextView txvA,txvB,txvC,txvD,title;
-    TextView txv;
-    TextView txv2;
-    TextView subtitle;
-    TextView motion;
-    TextView face;
+    ImageView iv;
 
     Row row;
     Sheet sheet;
     InputStream is;
     XSSFWorkbook workbook;
 
-    int score = 0 ;
+    int score = 0;
+    int start = 0;
+    int end = 0;
 
     private TextToSpeech textToSpeech; // TTS对象
 
@@ -66,9 +65,7 @@ public class Ending extends AppCompatActivity {
 
     //Video
     private VideoView videoView;
-    private Button btn_start, btn_end;
     private MediaController mediaController;
-    int index_video = 0;
 
     //timer
     Timer timer;
@@ -77,14 +74,11 @@ public class Ending extends AppCompatActivity {
 
     //one time
     int once = 1;
-    Boolean stop = false;
 
     DataFormatter fmt;
 
     int row_cell = 0;
     int num_cell = 1;
-
-    String filename = "";
 
     ArrayList<String> Face = new ArrayList<>();
     ArrayList<String> Face_clock = new ArrayList<>();
@@ -121,7 +115,7 @@ public class Ending extends AppCompatActivity {
         initView();
         Intent it = Ending.this.getIntent();
         score = it.getIntExtra("score",2);
-
+        current_sheet = it.getIntExtra("current_sheet",2);
 
         //Step 1 : Initial Nuwa API Object
         mClientId = new IClientId(this.getPackageName());
@@ -136,36 +130,55 @@ public class Ending extends AppCompatActivity {
                     time_Total++;
                     time_now++;
 
-                    if((time_now <=180) && (current_sheet <= all_sheet  && !stop)){
-
+                    if((time_now <=25)){
                         if (once != 0) {
                             setexcel();
                             initValue();
                             sheet = workbook.getSheet(String.valueOf(row.getCell(current_sheet)));
                             setTitle(String.valueOf(row.getCell(current_sheet)));
-                            String is_Section = String.valueOf(row.getCell(current_sheet)).substring(0,7);
-                            String is_Review = String.valueOf(row.getCell(current_sheet)).substring(0,6);
-                            //Toast.makeText(MainActivity.this,is_Review,Toast.LENGTH_SHORT).show();
-                            //Toast.makeText(MainActivity.this,is_Section,Toast.LENGTH_SHORT).show();
-                            //Toast.makeText(MainActivity.this,is_Review,Toast.LENGTH_SHORT).show();
-                            if(is_Section.equals("Section")){
+
+                            switch (score){
+                                case 0:
+                                    start = 0;
+                                    end = 2;
+                                    break;
+                                case 1:
+                                    start = 3;
+                                    end = 5;
+                                    break;
+                                case 2:
+                                    start = 6;
+                                    end = 8;
+                                    break;
+                                case 3:
+                                    start = 9;
+                                    end = 11;
+                                    break;
+                                case 4:
+                                    start = 12;
+                                    end = 14;
+                                    break;
+                                case 5:
+                                    start = 15;
+                                    end = 17;
+                                    break;
+                                case 6:
+                                    start = 18;
+                                    end = 20;
+                                    break;
+                                case 7:
+                                    start = 21;
+                                    end = 23;
+                                    break;
+                            }
                                 deal_Section(sheet);
                                 once = 0;
                                 current_sheet++;
-                            }
-                            else if(is_Review.equals("Review")){
-                                stop = true;
-                                Intent it = new Intent(Ending.this,Review.class);
-                                it.putExtra("current_sheet",current_sheet);
-                                it.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                startActivity(it);
-                            }
                         }
                     }
 
-                    if(time_now > 180 && !stop){
-                        time_now %= 180;
-                        once = 1;
+                    if(time_now > 25){
+                        Toast.makeText(Ending.this,"結束了",Toast.LENGTH_SHORT).show();
                     }
                             /*if (textToSpeech != null && !textToSpeech.isSpeaking()) {
                                 // 设置音调，值越大声音越尖（女生），值越小则变成男声,1.0是常规
@@ -176,48 +189,50 @@ public class Ending extends AppCompatActivity {
                                 textToSpeech.speak("I AM", TextToSpeech.QUEUE_FLUSH, null);
                             }*/
 
-                    for (int i = 0; i < Voice_clock.size(); i++) {
-                        if (time_now == Integer.parseInt(Voice_clock.get(i))) {
-                           // soundPoolHelper.play(voiname[i], false);
+                    for (int i = start; i < end; i++) {
+                        if (!Voice_clock.isEmpty() && time_now == Integer.parseInt(Voice_clock.get(i)) && !Voice.isEmpty()) {
+                            String str = Voice.get(i).substring(0, Voice.get(i).indexOf("."));
+                            soundPoolHelper.play(str, false);
                         }
                     }
 
-                    for (int i = 0; i < Face_clock.size(); i++) {
-                        if (time_now == Integer.parseInt(Face_clock.get(i))) {
-                            face.setText(Face.get(i));
+                    for (int i = start; i < end; i++) {
+                        if (!Face_clock.isEmpty() && time_now == Integer.parseInt(Face_clock.get(i))) {
                         }
                     }
 
-                    for (int i = 0; i < Video_clock.size(); i++) {
-                        if (time_now == Integer.parseInt(Video_clock.get(i))) {
+                    for (int i = start; i < end; i++) {
+                        if (!Video_clock.isEmpty() && time_now == Integer.parseInt(Video_clock.get(i))) {
                             play_video(Video.get(i));
                         }
                     }
 
-                    for (int i = 0; i < Image_clock.size(); i++) {
-                        if (time_now == Integer.parseInt(Image_clock.get(i))) {
-
+                    for (int i = start; i < end; i++) {
+                        if (!Image_clock.isEmpty() && time_now == Integer.parseInt(Image_clock.get(i))) {
+                            String str = Image.get(i).substring(0, Image.get(i).indexOf("."));
+                            int Id = getResources().getIdentifier(str,  "drawable", getPackageName());
+                            String uri = "android.resource://" + getPackageName() + "/" + Id;
+                            iv.setImageURI(Uri.parse(uri));
                         }
                     }
-                    for (int i = 0; i < Subtitle_clock.size(); i++) {
-                        if (time_now == Integer.parseInt(Subtitle_clock.get(i))) {
+                    for (int i = start; i < end; i++) {
+                        if (!Subtitle_clock.isEmpty() && time_now == Integer.parseInt(Subtitle_clock.get(i))) {
 
                             mRobotAPI.startTTS(Subtitle.get(i));
                             //showface(Subtitle.get(i));
                         }
                     }
-                    for (int i = 0; i < Motion_clock.size(); i++) {
-
+                    for (int i = start; i < end; i++) {
+                        if (!Motion_clock.isEmpty() && time_now == Integer.parseInt(Motion_clock.get(i)) && !Motion.isEmpty()) {
                             //Step 2 : Execute "Play motion"
-                            //mRobotAPI.motionPlay(Motion.get(i), true);
-
+                            mRobotAPI.motionPlay(Motion.get(i), true);
+                        }
                     }
                 });
             }
         };
         //幾秒做一次(單位：毫秒)
-        timer.schedule(task, 25, 25);
-
+        timer.schedule(task, 100, 100);
     }
 
     @Override
@@ -496,7 +511,7 @@ public class Ending extends AppCompatActivity {
         mTexPlayStatus = findViewById(R.id.play_status);
 
         videoView = findViewById(R.id.videoView);
-
+        iv = findViewById(R.id.iv);
       //  textToSpeech = new TextToSpeech(Ending.this, Ending.this); // 参数Context,TextToSpeech.OnInitListener
 
 
