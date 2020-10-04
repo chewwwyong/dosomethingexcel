@@ -2,13 +2,12 @@ package com.example.myapplication;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.TextView;
@@ -34,7 +33,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class MainActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
+public class Section extends AppCompatActivity implements TextToSpeech.OnInitListener {
 
     private static final long FACE_MOUTH_SPEED = 200;//set larger value for slower mouth speed
 
@@ -47,13 +46,13 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     int current_sheet = 0;
     int all_sheet = 0;
 
-
+    int time_limit = 300;
     Row row;
     Sheet sheet;
     InputStream is;
     XSSFWorkbook workbook;
 
-    private TextToSpeech textToSpeech; // TTS对象
+    private TextToSpeech textToSpeech; // TTS對象
 
     ImageView iv;
 
@@ -61,9 +60,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
     //Video
     private VideoView videoView;
-    private Button btn_start, btn_end;
     private MediaController mediaController;
-    int index_video = 0;
 
     //timer
     Timer timer;
@@ -78,8 +75,6 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
     int row_cell = 0;
     int num_cell = 1;
-
-    String filename = "";
 
     ArrayList<String> Face = new ArrayList<>();
     ArrayList<String> Face_clock = new ArrayList<>();
@@ -104,18 +99,21 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
     ArrayList<String> Type = new ArrayList<>();
     ArrayList<String> Text = new ArrayList<>();
-    String nowchoose = "";
-    ArrayList<String> Picture = new ArrayList<>();
-    ArrayList<String> Answer = new ArrayList<>();
 
+    ArrayList<String> Timeline = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if (getSupportActionBar() != null){
+            getSupportActionBar().hide();
+        }
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         initView();
-      //  setexcel();
         //Step 1 : Initial Nuwa API Object
         mClientId = new IClientId(this.getPackageName());
         mRobotAPI = new NuwaRobotAPI(this, mClientId);
@@ -129,13 +127,12 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                     time_Total++;
                     time_now++;
 
-                    if((time_now <= 279) && (current_sheet <= all_sheet) && !stop){
+                    if((time_now <= time_limit) && (current_sheet <= all_sheet) && !stop){
 
                         if (once != 0) {
                             setexcel();
                             initValue();
                             sheet = workbook.getSheet(String.valueOf(row.getCell(current_sheet)));
-
                             setTitle(String.valueOf(row.getCell(current_sheet)));
                             String is_Section = String.valueOf(row.getCell(current_sheet)).substring(0,7);
                             String is_Review = String.valueOf(row.getCell(current_sheet)).substring(0,6);
@@ -143,6 +140,9 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                             if(is_Section.equals("Section")){
                                 //Toast.makeText(MainActivity.this,"123",Toast.LENGTH_SHORT).show();
                                 deal_Section(sheet);
+                                String tmp = Timeline.get(Timeline.size()-1);
+                                time_limit = Integer.parseInt(tmp);
+                                Toast.makeText(Section.this,String.valueOf(time_limit),Toast.LENGTH_SHORT).show();
                                 loadSoundFile();
                                 once = 0;
                                 current_sheet++;
@@ -151,16 +151,17 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                                 stop = true;
                                 once = 0;
 
-                                Intent it = new Intent(MainActivity.this,Review.class);
+                                Intent it = new Intent(Section.this,Review.class);
                                 it.putExtra("current_sheet",current_sheet);
                                 it.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                 startActivity(it);
                             }
                         }
+
                     }
 
-                    if(time_now > 279 && !stop){
-                        time_now %= 279;
+                    if(time_now > time_limit && !stop){
+                        time_now %= time_limit;
                         once = 1;
                     }
                             /*if (textToSpeech != null && !textToSpeech.isSpeaking()) {
@@ -216,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
             }
         };
         //幾秒做一次(單位：毫秒)
-        timer.schedule(task, 25, 25);
+        timer.schedule(task, 1000, 1000);
     }
 
     @Override
@@ -249,6 +250,8 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
         Type = new ArrayList<>();
         Text = new ArrayList<>();
+
+        Timeline = new ArrayList<>();
     }
 
     public void deal_Section(Sheet sheet) {
@@ -445,6 +448,22 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
             }
             num_cell++;
         }
+
+        //處理Timeline
+        row = sheet.getRow(14);
+        row_cell = row.getPhysicalNumberOfCells();
+        num_cell = 1;
+        while (row_cell > 0) {
+            if (String.valueOf(row.getCell(num_cell)).length() != 0) {
+                //Excel中的數字是( 除了一些邊緣情況) 存儲為浮點數。 Java中的浮點數，當格式化為字元串時，會用一個尾隨的小數點列印
+                String ssss = fmt.formatCellValue(row.getCell(num_cell, Row.RETURN_BLANK_AS_NULL));
+                if (!ssss.trim().isEmpty()) {
+                    Timeline.add(ssss);
+                }
+                row_cell--;
+            }
+            num_cell++;
+        }
     }
 
     public void setexcel() {
@@ -459,7 +478,6 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         }
         // 取得sheet對象
         all_sheet = workbook.getNumberOfSheets();
-        //Toast.makeText(MainActivity.this,String.valueOf(all_sheet),Toast.LENGTH_SHORT).show();
         sheet = workbook.getSheetAt(0);
         // 取得row對象
         row = sheet.getRow(0);
@@ -479,9 +497,8 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
     protected void onStop() {
         super.onStop();
-        textToSpeech.stop(); // 不管是否正在朗读TTS都被打断
-        textToSpeech.shutdown(); // 关闭，释放资源
-
+        textToSpeech.stop(); // 不管是否正在朗讀TTS都被打斷
+        textToSpeech.shutdown(); // 關閉，釋放資源
 
         //Step 4 : Release robotAPI before closing activity
         if(mRobotAPI != null){
@@ -505,6 +522,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
 
     private void play_video(String str) {
+        videoView.setVisibility(View.VISIBLE);
         videoView = (VideoView) findViewById(R.id.videoView);
         mediaController = new MediaController(this);
         str = str.substring(0,str.indexOf("."));
@@ -523,13 +541,18 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                 return false;
             }
         });
-
+        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                videoView.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
     private void showEventMsg(String status){
         runOnUiThread(()->{
-            mTexPlayStatus.append(status);
-            mTexPlayStatus.append("\n");
+            //mTexPlayStatus.append(status);
+           // mTexPlayStatus.append("\n");
            // Log.d(TAG, status);
         });
 
@@ -603,7 +626,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         for (int i = 0; i < Voice_clock.size(); i++) {
             String str = Voice.get(i).substring(0, Voice.get(i).indexOf("."));
             int Id = getResources().getIdentifier(str,  "raw", getPackageName());
-            soundPoolHelper.load(MainActivity.this, str,  Id);
+            soundPoolHelper.load(Section.this, str,  Id);
             try {
                 Thread.sleep(50);// 給予初始化音樂文件足夠時間
             } catch (InterruptedException e) {

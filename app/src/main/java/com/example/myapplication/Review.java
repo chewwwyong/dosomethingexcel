@@ -84,7 +84,23 @@ public class Review extends AppCompatActivity {
                 Toast.makeText(Review.this,"答對了",Toast.LENGTH_SHORT).show();
                 times--;
                 score++;
+            }
+            else{
+                Toast.makeText(Review.this,"答錯了",Toast.LENGTH_SHORT).show();
+                times--;
+            }
+            exe();
+        });
+
+        qB.setOnClickListener(v -> {
+
+            nowchoose = "B";
+            if(ans.equals(nowchoose)){
+                times--;
+                score++;
                 exe();
+                Toast.makeText(Review.this,"答對了",Toast.LENGTH_SHORT).show();
+
             }
             else{
                 Toast.makeText(Review.this,"答錯了",Toast.LENGTH_SHORT).show();
@@ -93,42 +109,17 @@ public class Review extends AppCompatActivity {
             }
         });
 
-        qB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                nowchoose = "B";
-                if(ans.equals(nowchoose)){
-                    times--;
-                    score++;
-                    exe();
-                    Toast.makeText(Review.this,"答對了",Toast.LENGTH_SHORT).show();
-
-                }
-                else{
-                    Toast.makeText(Review.this,"答錯了",Toast.LENGTH_SHORT).show();
-                    times--;
-                    exe();
-                }
+        qC.setOnClickListener(v -> {
+            nowchoose = "C";
+            if(ans.equals(nowchoose)){
+                Toast.makeText(Review.this,"答對了",Toast.LENGTH_SHORT).show();
+                score++;
             }
-        });
-
-        qC.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                nowchoose = "C";
-                if(ans.equals(nowchoose)){
-                    Toast.makeText(Review.this,"答對了",Toast.LENGTH_SHORT).show();
-                    score++;
-                    times--;
-                    exe();
-                }
-                else{
-                    Toast.makeText(Review.this,"答錯了",Toast.LENGTH_SHORT).show();
-                    times--;
-                    exe();
-                }
+            else{
+                Toast.makeText(Review.this,"答錯了",Toast.LENGTH_SHORT).show();
             }
+            times--;
+            exe();
         });
 
         qD.setOnClickListener(new View.OnClickListener() {

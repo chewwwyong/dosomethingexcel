@@ -8,40 +8,40 @@
 
     <ImageView
         android:id="@+id/p1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="88dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="200dp"
+        android:layout_marginTop="76dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
         android:id="@+id/p4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="296dp"
-        android:layout_marginTop="88dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="532dp"
+        android:layout_marginTop="300dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
         android:id="@+id/p3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="316dp"
-        android:layout_marginTop="284dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="200dp"
+        android:layout_marginTop="300dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
         android:id="@+id/p2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="72dp"
-        android:layout_marginTop="276dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="532dp"
+        android:layout_marginTop="80dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
@@ -50,9 +50,10 @@
         android:id="@+id/qD"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="492dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginStart="420dp"
+        android:layout_marginTop="48dp"
         android:text="TextView"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/qC" />
 
@@ -60,9 +61,10 @@
         android:id="@+id/qA"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="492dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginStart="420dp"
+        android:layout_marginTop="48dp"
         android:text="TextView"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title" />
 
@@ -70,9 +72,10 @@
         android:id="@+id/qB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="492dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginStart="420dp"
+        android:layout_marginTop="48dp"
         android:text="TextView"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/qA" />
 
@@ -80,9 +83,10 @@
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="492dp"
-        android:layout_marginTop="68dp"
+        android:layout_marginStart="420dp"
+        android:layout_marginTop="32dp"
         android:text="TextView"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -90,9 +94,10 @@
         android:id="@+id/qC"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="492dp"
+        android:layout_marginStart="420dp"
         android:layout_marginTop="56dp"
         android:text="TextView"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/qB" />
 </androidx.constraintlayout.widget.ConstraintLayout>
