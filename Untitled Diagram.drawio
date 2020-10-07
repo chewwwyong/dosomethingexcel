@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2020-10-07T03:05:18.675Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36" etag="tcZvqL5KHWyLG__236J8" version="13.7.7" type="github" pages="2">
+<mxfile host="app.diagrams.net" modified="2020-10-07T03:09:47.780Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36" etag="iFIKRAIKECyxB4pcm5T1" version="13.7.7" type="github" pages="2">
   <diagram name="sequence diagram" id="9361dd3d-8414-5efd-6122-117bd74ce7a7">
-    <mxGraphModel dx="1673" dy="1341" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1.5" pageWidth="826" pageHeight="1169" background="#ffffff" math="0" shadow="0">
+    <mxGraphModel dx="1422" dy="1200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1.5" pageWidth="826" pageHeight="1169" background="#ffffff" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -49,7 +49,7 @@
         <mxCell id="9md9J8usKPNt-FavH-AS-94" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="KS5qGZGqWQ05uNnQKcyR-89" target="2" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="KS5qGZGqWQ05uNnQKcyR-89" value="User" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" parent="1" vertex="1">
+        <mxCell id="KS5qGZGqWQ05uNnQKcyR-89" value="User" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;rotation=0;" parent="1" vertex="1">
           <mxGeometry x="190" y="30" width="30" height="60" as="geometry" />
         </mxCell>
         <mxCell id="fRHlmYLXV_bzzpT5qPXO-91" value="" style="endArrow=classic;html=1;dashed=1;exitX=-0.021;exitY=0.929;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="GVuCOo1m7_N4sxVIkekQ-72" edge="1">
@@ -61,7 +61,7 @@
         </mxCell>
         <mxCell id="9md9J8usKPNt-FavH-AS-93" value="End" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="fRHlmYLXV_bzzpT5qPXO-91" vertex="1" connectable="0">
           <mxGeometry x="0.0654" y="1" relative="1" as="geometry">
-            <mxPoint as="offset" />
+            <mxPoint x="50.21" y="-12.16" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="9md9J8usKPNt-FavH-AS-84" value="Text_type" style="edgeStyle=elbowEdgeStyle;elbow=vertical;verticalLabelPosition=top;verticalAlign=bottom" parent="1" edge="1">
@@ -295,7 +295,7 @@
         <mxCell id="S5V0LhMDhIqk0AyRmhoE-5" value="Review" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#000000;" parent="P1gCdbork5o8AnYZZEtu-1" vertex="1">
           <mxGeometry x="539" y="265" width="71" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="ZaFx9XiumE48rM6VbhXs-3" value="給予評價" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#000000;" parent="P1gCdbork5o8AnYZZEtu-1" vertex="1">
+        <mxCell id="ZaFx9XiumE48rM6VbhXs-3" value="Feedback" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#000000;" parent="P1gCdbork5o8AnYZZEtu-1" vertex="1">
           <mxGeometry x="650" y="265" width="71" height="40" as="geometry" />
         </mxCell>
         <mxCell id="KpZZcX2TR3Z07vyWV9OH-0" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;" edge="1" parent="P1gCdbork5o8AnYZZEtu-1" target="KpZZcX2TR3Z07vyWV9OH-1">
@@ -307,7 +307,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="KpZZcX2TR3Z07vyWV9OH-1" value="Section" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#000000;" vertex="1" parent="P1gCdbork5o8AnYZZEtu-1">
-          <mxGeometry x="539" y="340" width="71" height="40" as="geometry" />
+          <mxGeometry x="540" y="340" width="71" height="40" as="geometry" />
         </mxCell>
         <mxCell id="KpZZcX2TR3Z07vyWV9OH-2" value="Ending" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#000000;" vertex="1" parent="P1gCdbork5o8AnYZZEtu-1">
           <mxGeometry x="539" y="200" width="71" height="40" as="geometry" />
