@@ -142,7 +142,6 @@ public class Section extends AppCompatActivity implements TextToSpeech.OnInitLis
                                 deal_Section(sheet);
                                 String tmp = Timeline.get(Timeline.size()-1);
                                 time_limit = Integer.parseInt(tmp);
-                                Toast.makeText(Section.this,String.valueOf(time_limit),Toast.LENGTH_SHORT).show();
                                 loadSoundFile();
                                 once = 0;
                                 current_sheet++;
@@ -217,7 +216,7 @@ public class Section extends AppCompatActivity implements TextToSpeech.OnInitLis
             }
         };
         //幾秒做一次(單位：毫秒)
-        timer.schedule(task, 1000, 1000);
+        timer.schedule(task, 1225, 1225);
     }
 
     @Override

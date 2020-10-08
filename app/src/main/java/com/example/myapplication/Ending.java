@@ -179,6 +179,7 @@ public class Ending extends AppCompatActivity {
 
                     if(time_now > 25){
                         Toast.makeText(Ending.this,"結束了",Toast.LENGTH_SHORT).show();
+
                     }
                             /*if (textToSpeech != null && !textToSpeech.isSpeaking()) {
                                 // 设置音调，值越大声音越尖（女生），值越小则变成男声,1.0是常规
