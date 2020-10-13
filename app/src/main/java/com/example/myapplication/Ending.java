@@ -35,7 +35,7 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Ending extends AppCompatActivity {
+public class Ending extends AppCompatActivity  implements TextToSpeech.OnInitListener{
 
     private static final long FACE_MOUTH_SPEED = 200;//set larger value for slower mouth speed
 
@@ -136,7 +136,7 @@ public class Ending extends AppCompatActivity {
                             initValue();
                             sheet = workbook.getSheet(String.valueOf(row.getCell(current_sheet)));
                             setTitle(String.valueOf(row.getCell(current_sheet)));
-
+                            loadSoundFile();
                             switch (score){
                                 case 0:
                                     start = 0;
@@ -179,7 +179,10 @@ public class Ending extends AppCompatActivity {
 
                     if(time_now > 25){
                         Toast.makeText(Ending.this,"結束了",Toast.LENGTH_SHORT).show();
-
+                        videoView.setVisibility(View.INVISIBLE);
+                        videoView = findViewById(R.id.videoView);
+                        videoView.suspend();
+                        iv.setVisibility(View.INVISIBLE);
                     }
                             /*if (textToSpeech != null && !textToSpeech.isSpeaking()) {
                                 // 设置音调，值越大声音越尖（女生），值越小则变成男声,1.0是常规
@@ -191,14 +194,9 @@ public class Ending extends AppCompatActivity {
                             }*/
 
                     for (int i = start; i < end; i++) {
-                        if (!Voice_clock.isEmpty() && time_now == Integer.parseInt(Voice_clock.get(i)) && !Voice.isEmpty()) {
+                        if (!Voice_clock.isEmpty() && time_now == Integer.parseInt(Voice_clock.get(i))) {
                             String str = Voice.get(i).substring(0, Voice.get(i).indexOf("."));
                             soundPoolHelper.play(str, false);
-                        }
-                    }
-
-                    for (int i = start; i < end; i++) {
-                        if (!Face_clock.isEmpty() && time_now == Integer.parseInt(Face_clock.get(i))) {
                         }
                     }
 
@@ -209,8 +207,13 @@ public class Ending extends AppCompatActivity {
                     }
 
                     for (int i = start; i < end; i++) {
-                        if (!Image_clock.isEmpty() && time_now == Integer.parseInt(Image_clock.get(i))) {
-                            String str = Image.get(i).substring(0, Image.get(i).indexOf("."));
+                        if (time_now == Integer.parseInt(Image_clock.get(start/3))) {
+
+                            videoView = findViewById(R.id.videoView);
+                            videoView.setVisibility(View.INVISIBLE);
+                            videoView.suspend();
+
+                            String str = Image.get(start/3).substring(0, Image.get(start/3).indexOf("."));
                             int Id = getResources().getIdentifier(str,  "drawable", getPackageName());
                             String uri = "android.resource://" + getPackageName() + "/" + Id;
                             iv.setImageURI(Uri.parse(uri));
@@ -218,7 +221,6 @@ public class Ending extends AppCompatActivity {
                     }
                     for (int i = start; i < end; i++) {
                         if (!Subtitle_clock.isEmpty() && time_now == Integer.parseInt(Subtitle_clock.get(i))) {
-
                             mRobotAPI.startTTS(Subtitle.get(i));
                             //showface(Subtitle.get(i));
                         }
@@ -233,7 +235,7 @@ public class Ending extends AppCompatActivity {
             }
         };
         //幾秒做一次(單位：毫秒)
-        timer.schedule(task, 100, 100);
+        timer.schedule(task, 1000, 1000);
     }
 
     @Override
@@ -484,7 +486,7 @@ public class Ending extends AppCompatActivity {
         fmt = new DataFormatter();
     }
 
-    /*@Override
+    @Override
     public void onInit(int status) {
         if (status == TextToSpeech.SUCCESS) {
             int result = textToSpeech.setLanguage(Locale.CHINA);
@@ -493,7 +495,8 @@ public class Ending extends AppCompatActivity {
                 Toast.makeText(this, "数据丢失或不支持", Toast.LENGTH_SHORT).show();
             }
         }
-    }*/
+    }
+
 
     protected void onStop() {
         super.onStop();
@@ -515,16 +518,14 @@ public class Ending extends AppCompatActivity {
         iv = findViewById(R.id.iv);
       //  textToSpeech = new TextToSpeech(Ending.this, Ending.this); // 参数Context,TextToSpeech.OnInitListener
 
-
-
-        soundPoolHelper = new SoundPoolHelper(6, SoundPoolHelper.TYPE_MUSIC)
-                .setRingtoneType(SoundPoolHelper.RING_TYPE_MUSIC)
-                .load(Ending.this, "OldMan_v1.mp3", R.raw.into);
-
+        soundPoolHelper = new SoundPoolHelper(30, SoundPoolHelper.TYPE_MUSIC)
+                .setRingtoneType(SoundPoolHelper.RING_TYPE_MUSIC);
     }
 
 
     private void play_video(String str) {
+        iv.setVisibility(View.INVISIBLE);
+        videoView.setVisibility(View.VISIBLE);
         videoView = (VideoView) findViewById(R.id.videoView);
         mediaController = new MediaController(this);
         str = str.substring(0,str.indexOf("."));
@@ -543,13 +544,19 @@ public class Ending extends AppCompatActivity {
                 return false;
             }
         });
-
+        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                videoView.setVisibility(View.INVISIBLE);
+                iv.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     private void showEventMsg(String status){
         runOnUiThread(()->{
-            mTexPlayStatus.append(status);
-            mTexPlayStatus.append("\n");
+            //mTexPlayStatus.append(status);
+            //mTexPlayStatus.append("\n");
             // Log.d(TAG, status);
         });
 
@@ -616,6 +623,18 @@ public class Ending extends AppCompatActivity {
     private void mouthOff() {
         if (mRobotAPI != null) {
             mRobotAPI.UnityFaceManager().mouthOff();
+        }
+    }
+    private void loadSoundFile(){
+        for (int i = 0; i < Voice_clock.size(); i++) {
+            String str = Voice.get(i).substring(0, Voice.get(i).indexOf("."));
+            int Id = getResources().getIdentifier(str,  "raw", getPackageName());
+            soundPoolHelper.load(Ending.this, str,  Id);
+            try {
+                Thread.sleep(2);// 給予初始化音樂文件足夠時間
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

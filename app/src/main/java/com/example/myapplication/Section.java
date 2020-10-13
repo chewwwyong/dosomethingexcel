@@ -58,6 +58,8 @@ public class Section extends AppCompatActivity implements TextToSpeech.OnInitLis
 
     private SoundPoolHelper soundPoolHelper;
 
+    TextView time;
+
     //Video
     private VideoView videoView;
     private MediaController mediaController;
@@ -113,6 +115,8 @@ public class Section extends AppCompatActivity implements TextToSpeech.OnInitLis
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        time = findViewById(R.id.time);
+
         initView();
         //Step 1 : Initial Nuwa API Object
         mClientId = new IClientId(this.getPackageName());
@@ -126,6 +130,7 @@ public class Section extends AppCompatActivity implements TextToSpeech.OnInitLis
                 runOnUiThread(() -> {
                     time_Total++;
                     time_now++;
+                    time.setText(String.valueOf(time_Total));
 
                     if((time_now <= time_limit) && (current_sheet <= all_sheet) && !stop){
 
@@ -163,17 +168,10 @@ public class Section extends AppCompatActivity implements TextToSpeech.OnInitLis
                         time_now %= time_limit;
                         once = 1;
                     }
-                            /*if (textToSpeech != null && !textToSpeech.isSpeaking()) {
-                                // 设置音调，值越大声音越尖（女生），值越小则变成男声,1.0是常规
-                                textToSpeech.setPitch(1.0f);
-                                //设定语速 ，默认1.0正常语速
-                                textToSpeech.setSpeechRate(1.0f);
-                                //朗读，注意这里三个参数的added in API level 4   四个参数的added in API level 21
-                                textToSpeech.speak("I AM", TextToSpeech.QUEUE_FLUSH, null);
-                            }*/
+
 
                     for (int i = 0; i < Voice_clock.size(); i++) {
-                        if (!Voice_clock.isEmpty() && time_now == Integer.parseInt(Voice_clock.get(i)) && !Voice.isEmpty()) {
+                        if (time_now == Integer.parseInt(Voice_clock.get(i))) {
                             String str = Voice.get(i).substring(0, Voice.get(i).indexOf("."));
                             soundPoolHelper.play(str, false);
                         }
@@ -185,13 +183,18 @@ public class Section extends AppCompatActivity implements TextToSpeech.OnInitLis
                     }*/
 
                     for (int i = 0; i < Video_clock.size(); i++) {
-                        if (!Video_clock.isEmpty() && time_now == Integer.parseInt(Video_clock.get(i))) {
+                        if (time_now == Integer.parseInt(Video_clock.get(i))) {
                             play_video(Video.get(i));
                         }
                     }
 
                     for (int i = 0; i < Image_clock.size(); i++) {
-                        if (!Image_clock.isEmpty() && time_now == Integer.parseInt(Image_clock.get(i))) {
+                        if (time_now == Integer.parseInt(Image_clock.get(i))) {
+
+                            videoView.setVisibility(View.INVISIBLE);
+                            videoView = findViewById(R.id.videoView);
+                            videoView.suspend();
+
                             String str = Image.get(i).substring(0, Image.get(i).indexOf("."));
                             int Id = getResources().getIdentifier(str,  "drawable", getPackageName());
                             String uri = "android.resource://" + getPackageName() + "/" + Id;
@@ -200,23 +203,34 @@ public class Section extends AppCompatActivity implements TextToSpeech.OnInitLis
                     }
 
                     for (int i = 0; i < Subtitle_clock.size(); i++) {
-                        if ( !Subtitle_clock.isEmpty() && time_now == Integer.parseInt(Subtitle_clock.get(i))) {
-                            mRobotAPI.startTTS(Subtitle.get(i));
+                        if (time_now == Integer.parseInt(Subtitle_clock.get(i))) {
+                            //mRobotAPI.startTTS(Subtitle.get(i));
                             //showface(Subtitle.get(i));
+
+                            if (textToSpeech != null && !textToSpeech.isSpeaking()) {
+                                // 设置音调，值越大声音越尖（女生），值越小则变成男声,1.0是常规
+                                textToSpeech.setPitch(1.0f);
+                                //设定语速 ，默认1.0正常语速
+                                textToSpeech.setSpeechRate(1.0f);
+                                //朗读，注意这里三个参数的added in API level 4   四个参数的added in API level 21
+                                textToSpeech.speak(Subtitle.get(i), TextToSpeech.QUEUE_FLUSH, null);
+                            }
                         }
                     }
                     for ( int i = 0; i < Motion_clock.size(); i++) {
-                        if (!Motion_clock.isEmpty() && time_now == Integer.parseInt(Motion_clock.get(i)) && !Motion.isEmpty()) {
-
+                        if (time_now == Integer.parseInt(Motion_clock.get(i)) && !Motion.isEmpty()) {
+                            //mRobotAPI.hideWindow(false);
                             //Step 2 : Execute "Play motion"
-                            mRobotAPI.motionPlay(Motion.get(i), true);
+                            //mRobotAPI.motionPlay(Motion.get(i), true);
+                            //mRobotAPI.hideWindow(false);
                         }
                     }
+
                 });
             }
         };
         //幾秒做一次(單位：毫秒)
-        timer.schedule(task, 1225, 1225);
+        timer.schedule(task, 1000, 1000);
     }
 
     @Override
@@ -466,7 +480,7 @@ public class Section extends AppCompatActivity implements TextToSpeech.OnInitLis
     }
 
     public void setexcel() {
-        // 取得excel文件流
+        // 取得excel文件
         is = getResources().openRawResource(R.raw.blessing_09182020_revised);
         // 取得workbook對象
         workbook = null;
@@ -506,16 +520,11 @@ public class Section extends AppCompatActivity implements TextToSpeech.OnInitLis
     }
 
     private void initView() {
-
         mTexPlayStatus = findViewById(R.id.play_status);
-
         iv = findViewById(R.id.imageViewObj);
-
         videoView = findViewById(R.id.videoView);
-
         textToSpeech = new TextToSpeech(this, this); // 参数Context,TextToSpeech.OnInitListener
-
-        soundPoolHelper = new SoundPoolHelper(20, SoundPoolHelper.TYPE_MUSIC)
+        soundPoolHelper = new SoundPoolHelper(100, SoundPoolHelper.TYPE_MUSIC)
                 .setRingtoneType(SoundPoolHelper.RING_TYPE_MUSIC);
     }
 

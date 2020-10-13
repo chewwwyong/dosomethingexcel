@@ -66,7 +66,7 @@ public class Review extends AppCompatActivity {
         mClientId = new IClientId(this.getPackageName());
         mRobotAPI = new NuwaRobotAPI(this, mClientId);
         mRobotAPI.registerRobotEventListener(robotEventCallback); //listen callback of robot service event
-
+        mRobotAPI.hideWindow(false);
         qA = findViewById(R.id.qA);
         qB = findViewById(R.id.qB);
         qC = findViewById(R.id.qC);
@@ -360,7 +360,9 @@ public class Review extends AppCompatActivity {
         //num = 0;
         if(times>1){
             if(Type.get(num).equals("Text")){
+                mRobotAPI.hideWindow(false);
                 mRobotAPI.motionPlay(Motion.get(num), true);
+                mRobotAPI.hideWindow(false);
                 ans = Answer.get(num);
                 initview();
                 title.setText(Question.get(num));
@@ -373,13 +375,15 @@ public class Review extends AppCompatActivity {
             }
 
             else if (Type.get(num).equals("Picture")){
+                mRobotAPI.hideWindow(false);
                 mRobotAPI.motionPlay(Motion.get(num), true);
+                mRobotAPI.hideWindow(false);
                 ans = Answer.get(num);
                 //Toast.makeText(Review.this,"123",Toast.LENGTH_SHORT).show();
                 title.setText(Question.get(num));
 
                 initview();
-
+                title.setVisibility(View.VISIBLE);
                 p1.setVisibility(View.VISIBLE);
                 p2.setVisibility(View.VISIBLE);
                 p3.setVisibility(View.VISIBLE);
