@@ -1,18 +1,14 @@
-package com.example.myapplication;
+package com.example.ExcelFileReader;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
-import java.util.List;
 
 public class chooseFile extends AppCompatActivity {
 

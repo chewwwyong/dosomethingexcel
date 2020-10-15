@@ -88,10 +88,10 @@
 
     <ImageView
         android:id="@+id/p2"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="256dp"
-        android:layout_marginTop="244dp"
+        android:layout_width="115dp"
+        android:layout_height="115dp"
+        android:layout_marginStart="228dp"
+        android:layout_marginTop="236dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />

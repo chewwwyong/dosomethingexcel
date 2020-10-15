@@ -1,22 +1,20 @@
-package com.example.myapplication;
+package com.example.ExcelFileReader;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.nuwarobotics.lib.voice.ifly.model.answer.Answer;
 import com.nuwarobotics.service.IClientId;
 import com.nuwarobotics.service.agent.NuwaRobotAPI;
 import com.nuwarobotics.service.agent.RobotEventCallback;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -61,6 +59,12 @@ public class Review extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
+
+        if (getSupportActionBar() != null){
+            getSupportActionBar().hide();
+        }
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         //Step 1 : Initial Nuwa API Object
         mClientId = new IClientId(this.getPackageName());
@@ -380,9 +384,10 @@ public class Review extends AppCompatActivity {
                 mRobotAPI.hideWindow(false);
                 ans = Answer.get(num);
                 //Toast.makeText(Review.this,"123",Toast.LENGTH_SHORT).show();
-                title.setText(Question.get(num));
+
 
                 initview();
+                title.setText(Question.get(num));
                 title.setVisibility(View.VISIBLE);
                 p1.setVisibility(View.VISIBLE);
                 p2.setVisibility(View.VISIBLE);
@@ -393,22 +398,13 @@ public class Review extends AppCompatActivity {
                 p2.setImageURI(Uri.parse(Picture.get(num+1)));
                 p3.setImageURI(Uri.parse(Picture.get(num+2)));
                 p4.setImageURI(Uri.parse(Picture.get(num+3)));
-
                 num++;
-
             }
         }
         else{
-            current_sheet++;
-            Toast.makeText(Review.this,String.valueOf(score),Toast.LENGTH_SHORT).show();
-            Intent it = new Intent(Review.this,Ending.class);
-            it.putExtra("score",score);
-            it.putExtra("current_sheet",current_sheet);
-            it.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            startActivity(it);
+            checkSectionOrReview();
+
         }
-
-
     }
 
     public void initview(){
@@ -468,5 +464,43 @@ public class Review extends AppCompatActivity {
             // Log.d(TAG, status);
         });
 
+    }
+    private void checkSectionOrReview(){
+        setexcel();
+        current_sheet++;
+        sheet = workbook.getSheet(String.valueOf(row.getCell(current_sheet)));
+        setTitle(String.valueOf(row.getCell(current_sheet)));
+
+        String is_Section = "";
+        String is_Review = "";
+        if(String.valueOf(row.getCell(current_sheet)).length()==7){
+            is_Section = String.valueOf(row.getCell(current_sheet)).substring(0,7);
+        }
+        if(String.valueOf(row.getCell(current_sheet)).length()==6){
+            is_Review = String.valueOf(row.getCell(current_sheet)).substring(0,6);
+        }
+        if(is_Section.equals("Section")){
+
+            Intent it = new Intent(Review.this,Section.class);
+            it.putExtra("current_sheet",current_sheet);
+            it.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            startActivity(it);
+        }
+        else if(is_Review.equals("Review")){
+            //Toast.makeText(MainActivity.this,"123",Toast.LENGTH_SHORT).show();
+            setexcel();
+            sheet = workbook.getSheet(String.valueOf(row.getCell(current_sheet)));
+            times = sheet.getPhysicalNumberOfRows();
+            deal_Review(sheet);
+            exe();
+        }
+        else{
+            //Toast.makeText(Review.this,String.valueOf(score),Toast.LENGTH_SHORT).show();
+            Intent it = new Intent(Review.this,Ending.class);
+            it.putExtra("score",score);
+            it.putExtra("current_sheet",current_sheet);
+            it.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            startActivity(it);
+        }
     }
 }

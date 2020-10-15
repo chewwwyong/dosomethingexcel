@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="1024dp"
-    android:layout_height="500dp"
+    android:layout_height="640dp"
     tools:context=".Review">
 
     <ImageView
@@ -49,22 +49,29 @@
     <TextView
         android:id="@+id/qD"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="420dp"
-        android:layout_marginTop="48dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="460dp"
+        android:layout_marginEnd="181dp"
+        android:layout_marginBottom="72dp"
         android:text="TextView"
         android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/qC" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/p4"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/qA"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="420dp"
+        android:layout_marginStart="460dp"
         android:layout_marginTop="48dp"
+        android:layout_marginEnd="181dp"
         android:text="TextView"
         android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/qB"
+        app:layout_constraintEnd_toStartOf="@+id/p2"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title" />
 
@@ -72,10 +79,14 @@
         android:id="@+id/qB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="420dp"
+        android:layout_marginStart="460dp"
         android:layout_marginTop="48dp"
+        android:layout_marginEnd="181dp"
         android:text="TextView"
         android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/qC"
+        app:layout_constraintEnd_toStartOf="@+id/p2"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/qA" />
 
@@ -83,21 +94,27 @@
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="420dp"
-        android:layout_marginTop="32dp"
         android:text="TextView"
         android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.100000024" />
 
     <TextView
         android:id="@+id/qC"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="420dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginStart="460dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="181dp"
+        android:layout_marginBottom="44dp"
         android:text="TextView"
         android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/qD"
+        app:layout_constraintEnd_toStartOf="@+id/p4"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/qB" />
 </androidx.constraintlayout.widget.ConstraintLayout>
